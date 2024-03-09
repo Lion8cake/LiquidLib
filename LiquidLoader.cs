@@ -240,28 +240,28 @@ namespace LiquidLib
             bool flag = false;
             int dustCount = -1;
             int dustType = -1;
-            LegacySoundStyle sound = null;
+            SoundStyle sound = SoundID.Dig;
 
             if (type == 0)
             {
                 flag = true;
                 dustCount = 50;
                 dustType = Dust.dustWater();
-                sound = new LegacySoundStyle(19, 0);
-            }
+                sound = SoundID.Splash; //19, 0
+			}
             else if (type == 1)
             {
                 flag = true;
                 dustCount = 20;
                 dustType = 35;
-                sound = new LegacySoundStyle(19, 1);
-            }
+                sound = SoundID.Splash; //19, 1
+			}
             else if (type == 2)
             {
                 flag = true;
                 dustCount = 20;
                 dustType = 152;
-                sound = new LegacySoundStyle(19, 1);
+                sound = SoundID.Splash; //19, 1
             }
             else if (liquids.TryGetValue(type, out var modLiquid))
                 if (modLiquid.OnInLiquid(entity))
@@ -288,28 +288,28 @@ namespace LiquidLib
             bool flag = false;
             int dustCount = -1;
             int dustType = -1;
-            LegacySoundStyle sound = null;
+            SoundStyle sound = SoundID.Dig;
 
-            if (type == 0)
+			if (type == 0)
             {
                 flag = true;
                 dustCount = 50;
                 dustType = Dust.dustWater();
-                sound = new LegacySoundStyle(19, 0);
+                sound = SoundID.Splash; //19, 0
             }
             else if (type == 1)
             {
                 flag = true;
                 dustCount = 20;
                 dustType = 35;
-                sound = new LegacySoundStyle(19, 1);
-            }
+                sound = SoundID.Splash; //19, 1
+			}
             else if (type == 2)
             {
                 flag = true;
                 dustCount = 20;
                 dustType = 152;
-                sound = new LegacySoundStyle(19, 1);
+                sound = SoundID.Splash; //19, 1
             }
             else if (liquids.TryGetValue(type, out var modLiquid))
                 if (modLiquid.OnOutLiquid(entity))
@@ -330,7 +330,7 @@ namespace LiquidLib
             if (flag)
                 ParticlesAndSound(dustCount, dustType, sound, entity);
         }
-        static void ParticlesAndSound(int dustCount, int dustType, LegacySoundStyle sound, Entity entity)
+        static void ParticlesAndSound(int dustCount, int dustType, SoundStyle sound, Entity entity)
         {
             if (dustType >= 0)
                 for (int i = 0; i < dustCount; i++)

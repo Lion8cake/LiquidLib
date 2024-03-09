@@ -55,7 +55,7 @@ namespace LiquidLib
             return true;
         }
 
-        public virtual void ParticlesAndSound(int type, Entity entity, ref int dustCount, ref int dustType, ref LegacySoundStyle sound)
+        public virtual void ParticlesAndSound(int type, Entity entity, ref int dustCount, ref int dustType, ref SoundStyle sound)
         {
         }
 

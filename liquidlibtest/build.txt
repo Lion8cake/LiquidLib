@@ -1,0 +1,5 @@
+displayName = Liquid Test Mod
+author = Lion8cake
+version = 0.1
+modReferences = LiquidLib
+sortAfter = LiquidLib

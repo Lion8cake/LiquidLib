@@ -21,12 +21,12 @@ namespace LiquidLib
 				return;
 
 			var tile = Main.tile[i, j];
-			if (tile != null && tile.type == Type)
+			if (tile != null && tile.TileType == Type)
 			{
 				var player = Main.LocalPlayer;
 				player.cursorItemIconEnabled = true;
 				player.cursorItemIconID = -1;
-				player.cursorItemIconText = "Unloaded Liquid: " + (LiquidLoader.unloadedLiquids.TryGetValue(tile.frameX, out var name) ? name : "Undefined");
+				player.cursorItemIconText = "Unloaded Liquid: " + (LiquidLoader.unloadedLiquids.TryGetValue(tile.TileFrameX, out var name) ? name : "Undefined");
 			}
 		}
     }

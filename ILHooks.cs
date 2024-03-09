@@ -19,8 +19,8 @@ namespace LiquidLib
         static List<string> errors = new();
         public static void Load()
         {
-            IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalPrepareDraw += LiquidRenderer_InternalPrepareDraw;
-            IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalDraw += LiquidRenderer_InternalDraw;
+           // IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalPrepareDraw += LiquidRenderer_InternalPrepareDraw;
+            //IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalDraw += LiquidRenderer_InternalDraw;
 
             IL.Terraria.GameContent.Drawing.TileDrawing.DrawTile_LiquidBehindTile += TileDrawing_DrawTile_LiquidBehindTile;
             IL.Terraria.GameContent.Drawing.TileDrawing.DrawPartialLiquid += TileDrawing_DrawPartialLiquid;
@@ -28,7 +28,7 @@ namespace LiquidLib
             IL.Terraria.WaterfallManager.FindWaterfalls += WaterfallManager_FindWaterfalls;
             IL.Terraria.WaterfallManager.DrawWaterfall += WaterfallManager_DrawWaterfall;
 
-            IL.Terraria.Player.ItemCheck_UseBuckets += Player_ItemCheck_UseBuckets;
+           // IL.Terraria.Player.ItemCheck_UseBuckets += Player_ItemCheck_UseBuckets;
 
             IL.Terraria.Player.Update += Player_Update;
             IL.Terraria.NPC.Collision_WaterCollision += NPC_Collision_WaterCollision;
@@ -53,8 +53,8 @@ namespace LiquidLib
 
         public static void Unload()
         {
-            IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalPrepareDraw -= LiquidRenderer_InternalPrepareDraw;
-            IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalDraw -= LiquidRenderer_InternalDraw;
+            //IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalPrepareDraw -= LiquidRenderer_InternalPrepareDraw;
+            //IL.Terraria.GameContent.Liquid.LiquidRenderer.InternalDraw -= LiquidRenderer_InternalDraw;
 
             IL.Terraria.GameContent.Drawing.TileDrawing.DrawTile_LiquidBehindTile -= TileDrawing_DrawTile_LiquidBehindTile;
             IL.Terraria.GameContent.Drawing.TileDrawing.DrawPartialLiquid -= TileDrawing_DrawPartialLiquid;
@@ -62,7 +62,7 @@ namespace LiquidLib
             IL.Terraria.WaterfallManager.FindWaterfalls -= WaterfallManager_FindWaterfalls;
             IL.Terraria.WaterfallManager.DrawWaterfall -= WaterfallManager_DrawWaterfall;
 
-            IL.Terraria.Player.ItemCheck_UseBuckets -= Player_ItemCheck_UseBuckets;
+            //IL.Terraria.Player.ItemCheck_UseBuckets -= Player_ItemCheck_UseBuckets;
 
             IL.Terraria.Player.Update -= Player_Update;
             IL.Terraria.NPC.Collision_WaterCollision -= NPC_Collision_WaterCollision;
@@ -112,9 +112,9 @@ namespace LiquidLib
                 c.EmitDelegate<Func<byte>>(() => viscosityMask);
             }
             else
-                errors.Add("LiquidRenderer_InternalPrepareDraw");
+			    errors.Add("LiquidRenderer_InternalPrepareDraw");
 
-            if (c.TryGotoNext(i => i.MatchLdsfld<LiquidRenderer>("VISCOSITY_MASK")))
+			if (c.TryGotoNext(i => i.MatchLdsfld<LiquidRenderer>("VISCOSITY_MASK")))
             {
                 c.RemoveRange(3);
                 c.EmitDelegate<Func<byte>>(() => viscosityMask);
@@ -123,7 +123,7 @@ namespace LiquidLib
                 errors.Add("LiquidRenderer_InternalPrepareDraw");
 
             c.Index = 0;
-            if (c.TryGotoNext(i => i.MatchLdloc(114)))
+            if (c.TryGotoNext(i => i.MatchLdloc(0), i => i.MatchLdfld<Microsoft.Xna.Framework.Rectangle>("Y"), i => i.MatchStloc(8), i => i.MatchBr(out _)))
             {
                 c.Emit(OpCodes.Ldloc, 7);
                 c.Emit(OpCodes.Ldfld, typeof(LiquidRenderer)
@@ -304,7 +304,7 @@ namespace LiquidLib
             c.EmitDelegate<Action<Tile, Vector2, Rectangle, int, Color>>((tileCache, position, liquidSize, liquidType, aColor) =>
             {
                 int num = (int)tileCache.Slope;
-                if (!TileID.Sets.BlocksWaterDrawingBehindSelf[tileCache.type] || num == 0)
+                if (!TileID.Sets.BlocksWaterDrawingBehindSelf[tileCache.TileType] || num == 0)
                 {
                     Main.spriteBatch.Draw(
                         isWaterStyle ? TextureAssets.Liquid[liquidType].Value : LiquidLoader.GetFlowTexture(liquidType).Value,

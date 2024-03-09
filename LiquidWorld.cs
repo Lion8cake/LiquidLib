@@ -25,8 +25,8 @@ namespace LiquidLib
                     byteArray[index++] = (byte)tile.LiquidType;
                     list.Add(tile.LiquidType);
 
-                    if (tile.type == LiquidLib.unloadedTileID)
-                        list2.Add(tile.frameX);
+                    if (tile.TileType == LiquidLib.unloadedTileID)
+                        list2.Add(tile.TileFrameX);
                 }
             }
 
@@ -64,24 +64,24 @@ namespace LiquidLib
                     if (!LiquidLoader.liquids.TryGetValue(tile.LiquidType, out _) &&
                         LiquidLoader.unloadedLiquids.TryGetValue(tile.LiquidType, out _)) //Pack
                     {
-                        tile.IsActive = true;
-                        tile.type = LiquidLib.unloadedTileID;
-                        tile.frameX = (short)tile.LiquidType;
-                        tile.frameY = tile.LiquidAmount;
+                        tile.HasTile = true;
+                        tile.TileType = LiquidLib.unloadedTileID;
+                        tile.TileFrameX = (short)tile.LiquidType;
+                        tile.TileFrameY = tile.LiquidAmount;
                         tile.LiquidType = 0;
                         tile.LiquidAmount = 0;
                     }
-                    else if (tile.type == LiquidLib.unloadedTileID) //UnPack
+                    else if (tile.TileType == LiquidLib.unloadedTileID) //UnPack
                     {
-                        if (LiquidLoader.unloadedLiquids.TryGetValue(tile.frameX, out var name) &&
+                        if (LiquidLoader.unloadedLiquids.TryGetValue(tile.TileFrameX, out var name) &&
                             LiquidLoader.liquids.TryGetValue(name, out _))
                         {
-                            tile.IsActive = false;
-                            tile.type = 0;
-                            tile.LiquidType = tile.frameX;
-                            tile.LiquidAmount = (byte)tile.frameY;
-                            tile.frameX = 0;
-                            tile.frameY = 0;
+                            tile.HasTile = false;
+                            tile.TileType = 0;
+                            tile.LiquidType = tile.TileFrameX;
+                            tile.LiquidAmount = (byte)tile.TileFrameY;
+                            tile.TileFrameX = 0;
+                            tile.TileFrameY = 0;
                         }
                     }
                 }

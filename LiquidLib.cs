@@ -26,7 +26,7 @@ namespace LiquidLib
             LiquidLoader.Unload();
         }
 
-        public override void AddRecipeGroups() =>
+        public override void AddRecipeGroups()/* tModPorter Note: Removed. Use ModSystem.AddRecipeGroups */ =>
             bucketsRecipeGroupID = RecipeGroup.RegisterGroup("LiquidLib:Buckets",
                 new RecipeGroup(() => "Any Buckets", ItemID.WaterBucket, ItemID.LavaBucket, ItemID.HoneyBucket) { IconicItemId = ItemID.WaterBucket });
     }

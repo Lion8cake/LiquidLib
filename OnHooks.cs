@@ -41,12 +41,12 @@ namespace LiquidLib
         {
             On.Terraria.Tile.liquidType += Tile_liquidType;
             On.Terraria.Tile.liquidType_int += Tile_liquidType_int;
-            On.Terraria.Tile.lava += Tile_lava;
+			On.Terraria.Tile.lava += Tile_lava;
             On.Terraria.Tile.lava_bool += Tile_lava_bool;
             On.Terraria.Tile.honey += Tile_honey;
             On.Terraria.Tile.honey_bool += Tile_honey_bool;
-            HookEndpointManager.Add(typeof(Tile).GetMethod("get_LiquidType"), get_LiquidType);
-            HookEndpointManager.Add(typeof(Tile).GetMethod("set_LiquidType"), set_LiquidType);
+            //HookEndpointManager.Add(typeof(Tile).GetMethod("get_LiquidType"), get_LiquidType);
+            //HookEndpointManager.Add(typeof(Tile).GetMethod("set_LiquidType"), set_LiquidType);
             On.Terraria.Main.DoUpdate += Main_DoUpdate;
             On.Terraria.Liquid.Update += Liquid_Update;
             On.Terraria.Liquid.LavaCheck += Liquid_LavaCheck;
@@ -59,7 +59,7 @@ namespace LiquidLib
             RandomUpdate += OnHooks_RandomUpdate;
         }
 
-        public static void Unload()
+		public static void Unload()
         {
             On.Terraria.Tile.liquidType -= Tile_liquidType;
             On.Terraria.Tile.liquidType_int -= Tile_liquidType_int;
@@ -67,8 +67,8 @@ namespace LiquidLib
             On.Terraria.Tile.lava_bool -= Tile_lava_bool;
             On.Terraria.Tile.honey -= Tile_honey;
             On.Terraria.Tile.honey_bool -= Tile_honey_bool;
-            HookEndpointManager.Remove(typeof(Tile).GetMethod("get_LiquidType"), get_LiquidType);
-            HookEndpointManager.Remove(typeof(Tile).GetMethod("set_LiquidType"), set_LiquidType);
+            //HookEndpointManager.Remove(typeof(Tile).GetMethod("get_LiquidType"), get_LiquidType);
+            //HookEndpointManager.Remove(typeof(Tile).GetMethod("set_LiquidType"), set_LiquidType);
             On.Terraria.Main.DoUpdate -= Main_DoUpdate;
             On.Terraria.Liquid.Update -= Liquid_Update;
             On.Terraria.Liquid.LavaCheck -= Liquid_LavaCheck;
@@ -81,39 +81,39 @@ namespace LiquidLib
             RandomUpdate -= OnHooks_RandomUpdate;
         }
 
-        static byte Tile_liquidType(On.Terraria.Tile.orig_liquidType orig, Tile self) =>
-            GetLiquidType(self);
+		static byte Tile_liquidType(On.Terraria.Tile.orig_liquidType orig, ref Tile self) =>
+            GetLiquidType(ref self);
 
-        static void Tile_liquidType_int(On.Terraria.Tile.orig_liquidType_int orig, Tile self, int liquidType) =>
-            SetLiquidType(self, (byte)liquidType);
+        static void Tile_liquidType_int(On.Terraria.Tile.orig_liquidType_int orig, ref Tile self, int liquidType) =>
+            SetLiquidType(ref self, (byte)liquidType);
 
-        static bool Tile_lava(On.Terraria.Tile.orig_lava orig, Tile self) =>
-            GetLiquidType(self) == LiquidID.Lava;
+        static bool Tile_lava(On.Terraria.Tile.orig_lava orig, ref Tile self) =>
+            GetLiquidType(ref self) == LiquidID.Lava;
 
-        static void Tile_lava_bool(On.Terraria.Tile.orig_lava_bool orig, Tile self, bool lava)
+        static void Tile_lava_bool(On.Terraria.Tile.orig_lava_bool orig, ref Tile self, bool lava)
         {
             if (lava)
-                SetLiquidType(self, LiquidID.Lava);
+                SetLiquidType(ref  self, LiquidID.Lava);
             else
-                SetLiquidType(self, 0);
+                SetLiquidType(ref self, 0);
         }
 
-        static bool Tile_honey(On.Terraria.Tile.orig_honey orig, Tile self) =>
-            GetLiquidType(self) == LiquidID.Honey;
+        static bool Tile_honey(On.Terraria.Tile.orig_honey orig, ref Tile self) =>
+            GetLiquidType(ref self) == LiquidID.Honey;
 
-        static void Tile_honey_bool(On.Terraria.Tile.orig_honey_bool orig, Tile self, bool honey)
+        static void Tile_honey_bool(On.Terraria.Tile.orig_honey_bool orig, ref Tile self, bool honey)
         {
             if (honey)
-                SetLiquidType(self, LiquidID.Honey);
+                SetLiquidType(ref self, LiquidID.Honey);
             else
-                SetLiquidType(self, 0);
+                SetLiquidType(ref self, 0);
         }
 
         static Func<Tile, int> get_LiquidType =
-            (tile) => GetLiquidType(tile);
+            (tile) => GetLiquidType(ref tile);
 
         static Action<Tile, int> set_LiquidType =
-            (tile, type) => SetLiquidType(tile, (byte)type);
+            (tile, type) => SetLiquidType(ref tile, (byte)type);
 
         static void Main_DoUpdate(On.Terraria.Main.orig_DoUpdate orig, Main self, ref GameTime gameTime)
         {
@@ -157,8 +157,13 @@ namespace LiquidLib
             int index = 0;
 
             for (int i = xStart; i < xStart + width; i++)
+            {
                 for (int j = yStart; j < yStart + height; j++)
-                    Main.tile[i, j].LiquidType = byteArray[index++];
+                {
+                    Tile tile = Main.tile[i, j];
+                    tile.LiquidType = byteArray[index++];
+                }
+            }
         }
 
         static void OnHooks_OnInitialize(orig_OnInitialize orig, object self)
@@ -256,25 +261,25 @@ namespace LiquidLib
         //           0110_0000 - bTileHeader
         //           1110_0000 - bTileHeader3
         //           0011_1111 - Liquid Byte (64)
-        static byte GetLiquidType(Tile tile)
+        static byte GetLiquidType(ref Tile tile)
         {
             byte result = 0;
-            result.SetBit(0, tile.bTileHeader.IsBit(5));
-            result.SetBit(1, tile.bTileHeader.IsBit(6));
-            result.SetBit(2, tile.sTileHeader.IsBit(15));
-            result.SetBit(3, tile.bTileHeader3.IsBit(5));
-            result.SetBit(4, tile.bTileHeader3.IsBit(6));
-            result.SetBit(5, tile.bTileHeader3.IsBit(7));
+			result.SetBit(0, TileDataPacking.GetBit(5, 0));
+            result.SetBit(1, TileDataPacking.GetBit(6, 0));
+            result.SetBit(2, TileDataPacking.GetBit(15, 0));
+            result.SetBit(3, TileDataPacking.GetBit(5, 0));
+            result.SetBit(4, TileDataPacking.GetBit(6, 0));
+            result.SetBit(5, TileDataPacking.GetBit(7, 0));
             return result;
         }
-        static void SetLiquidType(Tile tile, byte v)
+        static void SetLiquidType(ref Tile tile, byte v)
         {
-            tile.bTileHeader.SetBit(5, v.IsBit(0));
-            tile.bTileHeader.SetBit(6, v.IsBit(1));
-            tile.sTileHeader.SetBit(15, v.IsBit(2));
-            tile.bTileHeader3.SetBit(5, v.IsBit(3));
-            tile.bTileHeader3.SetBit(6, v.IsBit(4));
-            tile.bTileHeader3.SetBit(7, v.IsBit(5));
+            TileDataPacking.SetBit(v.IsBit(0), 5, 0);
+            TileDataPacking.SetBit(v.IsBit(1), 6, 1);
+            TileDataPacking.SetBit(v.IsBit(2), 15, 2);
+            TileDataPacking.SetBit(v.IsBit(3), 5, 3);
+            TileDataPacking.SetBit(v.IsBit(4), 6, 4);
+            TileDataPacking.SetBit(v.IsBit(5), 7, 5);
         }
 
         static void SetBit(this ref byte b, int pos, bool v)

@@ -1,4 +1,4 @@
-﻿using Terraria;
+﻿/*using Terraria;
 using Terraria.Audio;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -17,7 +17,9 @@ namespace LiquidLib
 
         public LiquidBucket(ModLiquid modLiquid) => this.modLiquid = modLiquid;
 
-        public override void SetStaticDefaults()
+		public LiquidBucket() { }
+
+		public override void SetStaticDefaults()
         {
             DisplayName.SetDefault(modLiquid.Name[0].ToString().ToUpper() + modLiquid.Name.Remove(0, 1).ToLower() + " Bucket");
             Tooltip.SetDefault($"Contains a small amount of {modLiquid.Name.ToLower()}" + (modLiquid.AddOnlyBucket ? "\nCannot be poured out" : "\nCan be poured out"));
@@ -26,7 +28,7 @@ namespace LiquidLib
 
         public override void SetDefaults()
         {
-            modLiquid.BucketType = Type;
+            //modLiquid.BucketType = Type;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.useTurn = true;
             Item.useAnimation = 15;
@@ -46,8 +48,8 @@ namespace LiquidLib
             }
         }
 
-        public override bool CanUseItem(Player player) =>
-            !modLiquid.AddOnlyBucket;
+        //public override bool CanUseItem(Player player) =>
+         //   !modLiquid.AddOnlyBucket;
 
         public override bool? UseItem(Player player)
         {
@@ -63,7 +65,7 @@ namespace LiquidLib
                     {
                         Item.stack--;
                         player.PutItemInInventoryFromItemUsage(ItemID.EmptyBucket, player.selectedItem);
-                        SoundEngine.PlaySound(19, (int)player.position.X, (int)player.position.Y);
+                        SoundEngine.PlaySound(SoundID.SplashWeak, player.position);
                         return true;
                     }
                 }
@@ -77,4 +79,4 @@ namespace LiquidLib
         public override void ModifyResearchSorting(ref ContentSamples.CreativeHelper.ItemGroup itemGroup) =>
             itemGroup = ContentSamples.CreativeHelper.ItemGroup.Material;
     }
-}
+}*/

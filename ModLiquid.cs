@@ -41,7 +41,7 @@ namespace LiquidLib
 
         public int DustType { get; set; } = -1;
 
-        public LegacySoundStyle Sound { get; set; } = null;
+        public SoundStyle Sound { get; set; }
 
         public int Delay { get; set; } = 0;
 
@@ -66,7 +66,7 @@ namespace LiquidLib
                     throw new Exception("Fluids Limit Reached. (Max: 64)");
                 LiquidLoader.liquids.Add(this);
             }
-            this.Mod.AddContent(new LiquidBucket(this));
+            //this.Mod.AddContent(new LiquidBucket(this));
             LiquidLib.Instance.Logger.Info("Register new Liquid: " + this.FullName + ", OnlyBucket: " + AddOnlyBucket);
         }
 

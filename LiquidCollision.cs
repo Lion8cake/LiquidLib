@@ -7,7 +7,7 @@ namespace LiquidLib
         internal int lqiuid1;
         internal int lqiuid2;
         internal int tileType;
-        internal LegacySoundStyle sound;
+        internal SoundStyle sound;
 
         /// <summary> Set Tile id for collision liquids. </summary>
         public LiquidCollision SetTileType(int tileType)
@@ -17,7 +17,7 @@ namespace LiquidLib
         }
 
         /// <summary> Set Sound for collision liquids. </summary>
-        public LiquidCollision SetSound(LegacySoundStyle sound)
+        public LiquidCollision SetSound(SoundStyle sound)
         {
             this.sound = sound;
             return this;
